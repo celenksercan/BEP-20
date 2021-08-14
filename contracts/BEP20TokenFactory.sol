@@ -3,7 +3,7 @@ pragma solidity ^0.6.0;
 import './BEP20UpgradeableProxy.sol';
 import './IProxyInitialize.sol';
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
-
+/*Token faktory */
 contract BEP20TokenFactory is Ownable{
 
     address public logicImplement;
