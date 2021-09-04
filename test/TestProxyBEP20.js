@@ -20,3 +20,9 @@ contract('Upgradeable BEP20 token', (accounts) => {
         bep20FactoryOwner = accounts[0];
         bep20Owner = accounts[1];
         proxyAdmin = accounts[0];
+
+        const tx = await BEP20TokenFactoryInstance.createBEP20Token("ABC Token", "ABC", 18, web3.utils.toBN(1e18), true, bep20Owner, proxyAdmin, {from: bep20FactoryOwner});
+        truffleAssert.eventEmitted(tx, "TokenCreated",(ev) => {
+            bep20TokenAddress = ev.token;
+            return true;
+        });
