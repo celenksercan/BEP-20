@@ -32,3 +32,10 @@ contract('Upgradeable BEP20 token', (accounts) => {
             bep20TokenAddress = ev.token;
             return true;
         });
+
+        bep20Owner = accounts[1];
+
+        const bep20 = new web3.eth.Contract(abi, bep20TokenAddress);
+
+        const name = await bep20.methods.name().call({from: bep20Owner});
+        assert.equal(name, "ABC Token", "wrong token name");
