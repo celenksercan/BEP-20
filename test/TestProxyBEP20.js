@@ -84,3 +84,26 @@ contract('Upgradeable BEP20 token', (accounts) => {
         const balance = await bep20.methods.balanceOf(accounts[4]).call({from: accounts[4]});
         assert.equal(balance, web3.utils.toBN(1e17), "wrong balance");
     });
+
+        it('Test mint and burn', async () => {
+        const jsonFile = "test/abi/BEP20Implementation.json";
+        const abi= JSON.parse(fs.readFileSync(jsonFile));
+
+        bep20Owner = accounts[1];
+
+        const bep20 = new web3.eth.Contract(abi, bep20TokenAddress);
+
+        let totalSupply = await bep20.methods.totalSupply().call({from: bep20Owner});
+        assert.equal(totalSupply, web3.utils.toBN(1e18), "wrong totalSupply");
+
+        await bep20.methods.mint(web3.utils.toBN(9e18)).send({from: bep20Owner});
+
+        totalSupply = await bep20.methods.totalSupply().call({from: bep20Owner});
+        assert.equal(totalSupply, web3.utils.toBN(10e18), "wrong totalSupply");
+
+        await bep20.methods.transfer(accounts[5], web3.utils.toBN(2e18)).send({from: bep20Owner});
+        await bep20.methods.burn(web3.utils.toBN(2e18)).send({from: accounts[5]});
+
+        totalSupply = await bep20.methods.totalSupply().call({from: accounts[5]});
+        assert.equal(totalSupply, web3.utils.toBN(8e18), "wrong totalSupply");
+    });
