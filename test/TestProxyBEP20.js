@@ -39,3 +39,19 @@ contract('Upgradeable BEP20 token', (accounts) => {
 
         const name = await bep20.methods.name().call({from: bep20Owner});
         assert.equal(name, "ABC Token", "wrong token name");
+
+        const symbol = await bep20.methods.symbol().call({from: bep20Owner});
+        assert.equal(symbol, "ABC", "wrong token symbol");
+
+        const decimals = await bep20.methods.decimals().call({from: bep20Owner});
+        assert.equal(decimals, 18, "wrong token decimals");
+
+        const totalSupply = await bep20.methods.totalSupply().call({from: bep20Owner});
+        assert.equal(totalSupply, web3.utils.toBN(1e18), "wrong totalSupply");
+
+        const bep20OwnerBalance = await bep20.methods.balanceOf(bep20Owner).call({from: bep20Owner});
+        assert.equal(bep20OwnerBalance, web3.utils.toBN(1e18), "wrong balance");
+
+        const owner = await bep20.methods.getOwner().call({from: bep20Owner});
+        assert.equal(owner, bep20Owner, "wrong owner");
+    });
