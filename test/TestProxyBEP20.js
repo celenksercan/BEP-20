@@ -13,3 +13,10 @@ const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const fs = require('fs');
 
 let bep20TokenAddress;
+
+contract('Upgradeable BEP20 token', (accounts) => {
+    it('Create Token', async () => {
+        const BEP20TokenFactoryInstance = await BEP20TokenFactory.deployed();
+        bep20FactoryOwner = accounts[0];
+        bep20Owner = accounts[1];
+        proxyAdmin = accounts[0];
