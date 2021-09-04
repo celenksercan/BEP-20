@@ -55,3 +55,9 @@ contract('Upgradeable BEP20 token', (accounts) => {
         const owner = await bep20.methods.getOwner().call({from: bep20Owner});
         assert.equal(owner, bep20Owner, "wrong owner");
     });
+
+      it('Test bep20 transaction methods', async () => {
+        const jsonFile = "test/abi/IBEP20.json";
+        const abi= JSON.parse(fs.readFileSync(jsonFile));
+
+        bep20Owner = accounts[1];
