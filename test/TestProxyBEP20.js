@@ -61,3 +61,26 @@ contract('Upgradeable BEP20 token', (accounts) => {
         const abi= JSON.parse(fs.readFileSync(jsonFile));
 
         bep20Owner = accounts[1];
+
+          const bep20 = new web3.eth.Contract(abi, bep20TokenAddress);
+
+        const balanceOld = await bep20.methods.balanceOf(accounts[2]).call({from: bep20Owner});
+        assert.equal(balanceOld, web3.utils.toBN(0), "wrong balance");
+
+        await bep20.methods.transfer(accounts[2], web3.utils.toBN(1e17)).send({from: bep20Owner});
+
+        const balanceNew = await bep20.methods.balanceOf(accounts[2]).call({from: bep20Owner});
+        assert.equal(balanceNew, web3.utils.toBN(1e17), "wrong balance");
+
+        await bep20.methods.approve(accounts[3], web3.utils.toBN(1e17)).send({from: bep20Owner});
+
+        let allowance = await bep20.methods.allowance(bep20Owner, accounts[3]).call({from: accounts[3]});
+        assert.equal(allowance, web3.utils.toBN(1e17), "wrong allowance");
+
+        await bep20.methods.transferFrom(bep20Owner, accounts[4], web3.utils.toBN(1e17)).send({from: accounts[3]});
+
+        allowance = await bep20.methods.allowance(bep20Owner, accounts[3]).call({from: accounts[3]});
+        assert.equal(allowance, web3.utils.toBN(0), "wrong allowance");
+        const balance = await bep20.methods.balanceOf(accounts[4]).call({from: accounts[4]});
+        assert.equal(balance, web3.utils.toBN(1e17), "wrong balance");
+    });
